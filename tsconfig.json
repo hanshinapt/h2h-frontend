@@ -6,6 +6,8 @@
 		"strict": true,
 		"baseUrl": "./app",
 		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
 		"paths": {
 			"@/*": ["./*"],
 			"@api/*": ["api/*"],
