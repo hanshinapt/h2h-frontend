@@ -18,6 +18,6 @@ const GameQuestionsTempData = {
 	],
 };
 
-export const getGameQuestions = () => {
+export const getGameQuestions = (deckId: string) => {
 	return GameQuestionsTempData;
 };
