@@ -1,19 +1,31 @@
+import { Text, ScrollView } from 'react-native';
+import { useSetRecoilState } from 'recoil';
+import styled from 'styled-components/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
-import styled from 'styled-components/native';
-import { Text, ScrollView } from 'react-native';
 import { getGameInfo } from '@/api/GameEntryAPI';
 import ImageComponent from '@/components/common/Image';
 import ChipComponent from '@/components/gameEntry/Chip';
-import Icon from 'react-native-vector-icons/Ionicons';
 import IconButtonComponent from '@/components/common/IconButton';
+import { deckIdState } from '@/store/GameStore';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface GameEntryProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
 }
 
 const GameEntry = ({ navigation }: GameEntryProps) => {
-	const { title, tags, description } = getGameInfo();
+	const { id, title, tags, description } = getGameInfo();
+	const setDeckId = useSetRecoilState(deckIdState);
+
+	const goToGameQuestionPage = () => {
+		navigation.navigate('GameQuestion');
+	};
+
+	const handlePressPlayGame = () => {
+		goToGameQuestionPage();
+		setDeckId(id);
+	};
 
 	return (
 		<GameEntryContainer>
@@ -43,8 +55,7 @@ const GameEntry = ({ navigation }: GameEntryProps) => {
 					<Text>뒤로 가기</Text>
 					<Icon name="arrow-back-outline" />
 				</IconButtonComponent>
-				{/* 추후 navigate 경로 변경 */}
-				<IconButtonComponent onPress={() => navigation.navigate('Welcome')}>
+				<IconButtonComponent onPress={handlePressPlayGame}>
 					<Text>게임 진행하기</Text>
 					<Icon name="play-outline" />
 				</IconButtonComponent>
