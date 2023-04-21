@@ -1,6 +1,7 @@
 import { useReducer } from 'react';
 import styled from 'styled-components/native';
 import { useRecoilValue } from 'recoil';
+import GestureRecognizer from 'react-native-swipe-gestures';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
 
@@ -34,19 +35,23 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 
 	return (
 		<GameQuestionContainer>
-			<QuestionSection>
-				<QuestionIdx>{questionIdx + 1} 번째 질문</QuestionIdx>
-				<Question>{question}</Question>
-			</QuestionSection>
+			<GestureRecognizer
+				onSwipeLeft={() => dispatch('NEXT')}
+				onSwipeRight={() => dispatch('PREV')}>
+				<QuestionSection>
+					<QuestionIdx>{questionIdx + 1} 번째 질문</QuestionIdx>
+					<Question>{question}</Question>
+				</QuestionSection>
 
-			<ButtonsContainer>
-				<IconWrapper onPress={() => dispatch('PREV')}>
-					<Icon name="navigate-before" size={30} color="#51987F" />
-				</IconWrapper>
-				<IconWrapper onPress={() => dispatch('NEXT')}>
-					<Icon name="navigate-next" size={30} color="#51987F" />
-				</IconWrapper>
-			</ButtonsContainer>
+				<ButtonsContainer>
+					<IconWrapper onPress={() => dispatch('PREV')}>
+						<Icon name="navigate-before" size={30} color="#51987F" />
+					</IconWrapper>
+					<IconWrapper onPress={() => dispatch('NEXT')}>
+						<Icon name="navigate-next" size={30} color="#51987F" />
+					</IconWrapper>
+				</ButtonsContainer>
+			</GestureRecognizer>
 		</GameQuestionContainer>
 	);
 };
