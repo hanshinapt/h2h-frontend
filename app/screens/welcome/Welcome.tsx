@@ -10,8 +10,9 @@ interface WelcomProps {
 const Welcome = ({ navigation }: WelcomProps) => {
 	return (
 		<View>
-			<Button title="버튼" onPress={() => navigation.navigate('Main')} />
-			<Button title="버튼" onPress={() => navigation.navigate('GameEntry')} />
+			<Button title="Main" onPress={() => navigation.navigate('Main')} />
+			<Button title="GameEntry" onPress={() => navigation.navigate('GameEntry')} />
+			<Button title="Theme" onPress={() => navigation.navigate('Theme')} />
 			<Text>웰컴 페이지</Text>
 		</View>
 	);
