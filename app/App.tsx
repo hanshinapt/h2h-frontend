@@ -1,18 +1,20 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Welcome from '@screens/welcome/Welcome';
-import Main from '@screens/main/Main';
-import GameEntry from '@screens/gameEntry/gameEntry';
-import Theme from '@screens/theme/Theme';
-import GameQuestion from '@screens/gameQuestion/GameQuestion';
 import { RecoilRoot } from 'recoil';
+import Welcome from '@/screens/welcome/Welcome';
+import Main from '@/screens/main/Main';
+import GameEntry from '@/screens/gameEntry/gameEntry';
+import Theme from '@/screens/theme/Theme';
+import GameQuestion from '@/screens/gameQuestion/GameQuestion';
+import GameEnd from '@/screens/gameQuestion/GameEnd';
 
 export type StackParamList = {
 	Welcome: undefined;
 	Main: undefined;
 	GameEntry: undefined;
 	GameQuestion: undefined;
-	Theme : undefined;
+	GameEnd: undefined;
+	Theme: undefined;
 };
 
 const App = () => {
@@ -27,6 +29,7 @@ const App = () => {
 					<Stack.Screen name="Theme" component={Theme} />
 					<Stack.Screen name="GameEntry" component={GameEntry} />
 					<Stack.Screen name="GameQuestion" component={GameQuestion} />
+					<Stack.Screen name="GameEnd" component={GameEnd} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>

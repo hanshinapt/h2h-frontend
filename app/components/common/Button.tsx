@@ -14,9 +14,10 @@ const ButtonComponent = ({
 	bgColor,
 	onPress,
 }: ButtonComponentProps) => {
+	console.log(color, bgColor);
 	return (
-		<ButtonWrapper color={color} bgColor={bgColor} onPress={onPress}>
-			<ButtonText>{text}</ButtonText>
+		<ButtonWrapper bgColor={bgColor} onPress={onPress}>
+			<ButtonText color={color}>{text}</ButtonText>
 		</ButtonWrapper>
 	);
 };
@@ -24,7 +25,6 @@ const ButtonComponent = ({
 export default ButtonComponent;
 
 const ButtonWrapper = styled.TouchableOpacity<{
-	color?: string;
 	bgColor?: string;
 }>`
 	flex: 1;
@@ -34,11 +34,11 @@ const ButtonWrapper = styled.TouchableOpacity<{
 	padding: 8px;
 	gap: 16px;
 	border-radius: 8px;
-	color: ${(props) => props.color && props.color};
 	background-color: ${(props) => props.bgColor ?? 'white'};
 `;
 
-const ButtonText = styled.Text`
+const ButtonText = styled.Text<{ color?: string }>`
 	font-size: 16px;
 	text-align: center;
+	color: ${(props) => props.color && props.color};
 `;
