@@ -24,7 +24,7 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 				if (idx === 0) navigation.goBack(); // 게임 퇴장에 대한 alert
 			case 'NEXT':
 				if (idx < questions.length - 1) return idx + 1;
-				if (idx === questions.length - 1) navigation.navigate('Welcome'); // 게임 end에 대한 alert
+				if (idx === questions.length - 1) navigation.navigate('GameEnd');
 			default:
 				return 0;
 		}
