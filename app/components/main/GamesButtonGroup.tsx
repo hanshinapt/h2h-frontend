@@ -1,22 +1,12 @@
 import { ScrollView } from 'react-native';
 import styled from 'styled-components/native';
-import { Image, ImageSourcePropType, Dimensions } from 'react-native';
+import { GamesInfoType, TagsType } from '@/api/MainBestGamesAPI';
+import { Image, ImageSourcePropType } from 'react-native';
 import TitleComponent from './Title';
 
 interface GamseButtonGroupProps {
     title: string;
-    games: GameType[];
-}
-
-interface GameType {
-    gameId: string;
-    gameName: string;
-    gameTags: TagsType[];
-}
-
-interface TagsType {
-    tagId: string;
-    tagName: string;
+    games: GamesInfoType[];
 }
 
 interface GameButtonProps {
@@ -38,8 +28,8 @@ const GamesButtonGroupComponent = ({title, games}: GamseButtonGroupProps) => {
             <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}>
-                {games.map(({gameId, gameName, gameTags})=> (
-                    <GameButtonComponent key={gameId} name={gameName} tags={gameTags} />
+                {games.map(({id, title, tags})=> (
+                    <GameButtonComponent key={id} name={title} tags={tags} />
                 ))}
             </ScrollView>
         </GamesButtonGroupContainer>
@@ -50,17 +40,18 @@ const GameButtonComponent = ({name, tags}: GameButtonProps) => {
     return (
         <ButtonWrapper>
             
-            <ButtonNameWrapper>
+            <ImageComponent imageUrl={require(`@assets/traveling/traveling1.jpg`)}/>
+
+            <ButtonNameWrapper> 
                 <ButtonName numberOfLines={2} ellipsizeMode="tail">{name}</ButtonName>
             </ButtonNameWrapper>
 
             <ButtonTagsWrapper>
-                {tags.map(({tagId, tagName}) => (
-                    <ButtonTag key={tagId}>{`#${tagName}`}</ButtonTag>
+                {tags.map(({id, name}) => (
+                    <ButtonTag key={id}>{`#${name}`}</ButtonTag>
                 ))}
             </ButtonTagsWrapper>
             
-            <ImageComponent imageUrl={require(`@assets/traveling/traveling1.jpg`)}/>
 
         </ButtonWrapper>
     );
@@ -87,12 +78,18 @@ const GamesButtonGroupContainer = styled.View`
     border-radius: 10px;
 `;
 const ButtonWrapper = styled.View`
-    width: 150px;
-    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    width: 130px;
+    height: 150px;
  	background-color: #F99B7D;
 	border-radius: 10px;
     padding: 15px 10px;
-    margin: 5px 10px 0px 10px;
+    margin: 5px 10px;
+`;
+const ImageWrapper = styled.View`
+    width: 45px;
+    height: 45px;
 `;
 const ButtonNameWrapper = styled.View`
     height: 30%;
@@ -101,6 +98,7 @@ const ButtonNameWrapper = styled.View`
 `;
 const ButtonName = styled.Text`
     color: white;
+    font-size: 13px;
     font-weight: bold;
     text-align: center;
 `;
@@ -115,7 +113,4 @@ const ButtonTag = styled.Text`
     color: white;
     font-size: 10px;
 	font-weight: bold;
-`;
-const ImageWrapper = styled.View`
-    height: 55%;
 `;

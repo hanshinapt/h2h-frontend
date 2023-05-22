@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { ScrollView } from 'react-native';
-import { getThemeInfo } from '@/api/MainThemeAPI';
-import { getBestGamesInfo } from '@/api/MainBestGamesAPI';
+import { getThemeInfo, ThemeInfoType } from '@/api/MainThemeAPI';
+import { getBestGamesInfo, GamesInfoType } from '@/api/MainBestGamesAPI';
 import { getNewGamesInfo } from '@/api/MainNewGamesAPI';
 import ThemeButtonGroupComponent from '@/components/main/ThemeButtonGroup';
 import GamesButtonGroupComponent from '@/components/main/GamesButtonGroup';
@@ -13,9 +13,9 @@ interface MainProps {
 }
 
 const Main = ({navigation}: MainProps ) => {
-	const { theme } = getThemeInfo();
-  const { bestGames } = getBestGamesInfo(); 
-  const { newGames } = getNewGamesInfo(); 
+	const theme: ThemeInfoType[] = getThemeInfo();
+  const bestGames: GamesInfoType[] = getBestGamesInfo(); 
+  const newGames: GamesInfoType[] = getNewGamesInfo(); 
 	return (
 		<MainContainer>
 			<ScrollView>
