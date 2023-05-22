@@ -1,77 +1,88 @@
 import styled from 'styled-components/native';
-import TitleComponent from '@/components/main/Title';
 import Icon from 'react-native-vector-icons/Entypo';
-
+import { ThemeInfoType, getThemeInfo } from '@/api/MainThemeAPI';
 
 interface ThemeButtonGroupProps {
-    title: string;
-    theme: ThemeType[];
+	themes: ThemeType[];
 }
 interface ThemeType {
-    themeId: string;
-    themeName: string;
-    themeIcon: string;
+	themeId: string;
+	themeName: string;
+	themeIcon: string;
 }
 interface ThemeButtonProps {
 	name: string;
-    iconName: string;
+	iconName: string;
 }
 
-const ThemeButtonGroupComponent = ({title, theme}: ThemeButtonGroupProps) => {
-    return (
-        <ThemeButtonGroupContainer>
-            <TitleComponent title={title}/>
-            
-            <ThemeButtonContainer>
-                {theme.map(({themeId, themeName, themeIcon}) => {
-                    return (
-                        <ThemeButtonComponent key={themeId} name={themeName} iconName={themeIcon}/>
-                    );
-                })}
-            </ThemeButtonContainer>
-        </ThemeButtonGroupContainer>
+const ThemeButtonGroupComponent = ({ themes }: ThemeButtonGroupProps) => {
+	return (
+		<ThemeButtonGroupContainer>
+			<Header>안녕하세요! {'\n'} 대화하고 싶은 테마를 선택하세요.</Header>
 
-    );
+			<ThemeButtonSection>
+				{themes.map(({ themeId, themeName, themeIcon }) => {
+					return (
+						<ThemeButtonComponent
+							key={themeId}
+							name={themeName}
+							iconName={themeIcon}
+						/>
+					);
+				})}
+			</ThemeButtonSection>
+		</ThemeButtonGroupContainer>
+	);
 };
 
-const ThemeButtonComponent = ({name, iconName}: ThemeButtonProps) => {
-    return (
-        <ButtonWrapper>
-            <Icon name={iconName} size={25} color="white"/>
-            <ButtonText>{name}</ButtonText>
-        </ButtonWrapper>
-    );
+const ThemeButtonComponent = ({ name, iconName }: ThemeButtonProps) => {
+	return (
+		<ThemeButton>
+			<Icon name={iconName} size={20} color="#06ae53" />
+			<ThemeButtonText>{name}</ThemeButtonText>
+		</ThemeButton>
+	);
 };
 
 export default ThemeButtonGroupComponent;
 
 const ThemeButtonGroupContainer = styled.View`
-    background-color: #F1F6F9;
-    margin: 5px 3px;
-    padding: 5px 0px;
-    border-radius: 10px;
-`;
-const ThemeButtonContainer = styled.View`
-    display: flex;
-    flex-direction: row;
-    flexWrap: wrap;
-`;
-const ButtonWrapper = styled.View`
-    display: flex;
-	justify-content: center;
-	align-items: center;
-    background-color: #98D8AA;
-    width: 20%;
-    height: 75px;
-    border-radius: 12px;
-    margin: 2.5%;
-    padding-top: 3px;
+	width: 100%;
+	padding: 20px 0px;
 `;
 
-const ButtonText = styled.Text`
-    font-size: 10px;
+const Header = styled.Text`
 	font-weight: bold;
-    color: black;
+	font-size: 24px;
+	line-height: 36px;
 	text-align: center;
-    margin-top: 5px;
+`;
+
+const ThemeButtonSection = styled.View`
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	width: 100%;
+	gap: 20px;
+	padding-top: 20px;
+`;
+
+const ThemeButton = styled.TouchableOpacity`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 40%;
+	padding: 12px;
+	gap: 6px;
+	border: 1px solid #dcdcdc;
+	border-radius: 8px;
+`;
+
+const ThemeButtonText = styled.Text`
+	font-size: 16px;
+	font-weight: bold;
+	color: black;
+	text-align: center;
 `;
