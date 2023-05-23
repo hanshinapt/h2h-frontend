@@ -48,7 +48,6 @@ export default ThemeButtonGroupComponent;
 
 const ThemeButtonGroupContainer = styled.View`
 	width: 100%;
-	padding: 20px 0px;
 `;
 
 const Header = styled.Text`
@@ -62,7 +61,7 @@ const ThemeButtonSection = styled.View`
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: center;
+	justify-content: space-around;
 	width: 100%;
 	gap: 20px;
 	padding-top: 20px;
@@ -73,7 +72,7 @@ const ThemeButton = styled.TouchableOpacity`
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	width: 40%;
+	width: 45%;
 	padding: 12px;
 	gap: 6px;
 	border: 1px solid #dcdcdc;

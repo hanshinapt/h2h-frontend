@@ -12,25 +12,29 @@ interface MainProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
 }
 
-const Main = ({navigation}: MainProps ) => {
-	const theme: ThemeInfoType[] = getThemeInfo();
-  const bestGames: GamesInfoType[] = getBestGamesInfo(); 
-  const newGames: GamesInfoType[] = getNewGamesInfo(); 
+const Main = ({ navigation }: MainProps) => {
+	const sortType = ['most-liked', 'most-played'];
+
+	const themes: ThemeInfoType[] = getThemeInfo();
+	const bestGames: GamesInfoType[] = getBestGamesInfo();
+	const newGames: GamesInfoType[] = getNewGamesInfo();
+
 	return (
-		<MainContainer>
-			<ScrollView>
-        <ThemeButtonGroupComponent title="Theme" theme={theme}/>
-        
-        <GamesButtonGroupComponent title="Best Games" games={bestGames}/>
-        
-        <GamesButtonGroupComponent title="New Games" games={newGames}/>
-      </ScrollView>
-		</MainContainer>
+		<ScrollView showsHorizontalScrollIndicator={false}>
+			<MainContainer>
+				<ThemeButtonGroupComponent themes={themes} />
+
+				<GamesButtonGroupComponent title="Best Games" games={bestGames} />
+
+				<GamesButtonGroupComponent title="Best Games" games={newGames} />
+			</MainContainer>
+		</ScrollView>
 	);
 };
 
 export default Main;
 
 const MainContainer = styled.View`
-  background-color: white;
+	background-color: white;
+	padding: 20px;
 `;
