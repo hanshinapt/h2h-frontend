@@ -1,32 +1,28 @@
 import styled from 'styled-components/native';
 
 interface ChipProps {
-	text: string;
-	color?: string;
+	children: React.ReactNode;
 	bgColor?: string;
+	borderColor?: string;
 }
 
-const ChipComponent = ({ text, color, bgColor }: ChipProps) => {
+const ChipComponent = ({ children, bgColor, borderColor }: ChipProps) => {
 	return (
-		<ChipWrapper bgColor={bgColor}>
-			<ChipText color={color}>{text}</ChipText>
+		<ChipWrapper bgColor={bgColor} borderColor={borderColor}>
+			{children}
 		</ChipWrapper>
 	);
 };
 
 export default ChipComponent;
 
-const ChipWrapper = styled.View<{ bgColor?: string }>`
+const ChipWrapper = styled.View<{ bgColor?: string; borderColor?: string }>`
 	display: flex;
 	justify-content: center;
 	background-color: white;
-	border-radius: 12px;
+	border-radius: 14px;
 	padding: 8px;
 	font-size: 16px;
 	background-color: ${(props) => (props.bgColor ? props.bgColor : 'white')};
-`;
-
-const ChipText = styled.Text<{ color?: string }>`
-	text-align: center;
-	color: ${(props) => props.color && props.color};
+	border: ${(props) => props.borderColor && `1px solid ${props.borderColor}`};
 `;
