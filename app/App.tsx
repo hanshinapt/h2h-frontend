@@ -22,8 +22,8 @@ const App = () => {
 		<RecoilRoot>
 			<NavigationContainer>
 				<Stack.Navigator initialRouteName="Welcome">
-					<Stack.Screen name="Welcome" component={Welcome} />
-					<Stack.Screen name="Main" component={Main} />
+					<Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }}/>
+					<Stack.Screen name="Main" component={Main} options={{ headerShown: false }}/>
 					<Stack.Screen name="Theme" component={Theme} />
 					<Stack.Screen name="GameEntry" component={GameEntry} />
 					<Stack.Screen name="GameQuestion" component={GameQuestion} />
