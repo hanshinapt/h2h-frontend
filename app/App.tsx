@@ -12,7 +12,7 @@ export type StackParamList = {
 	Main: undefined;
 	GameEntry: undefined;
 	GameQuestion: undefined;
-	Theme : undefined;
+	Theme : {id: string, name: string, icon: string};
 };
 
 const App = () => {
