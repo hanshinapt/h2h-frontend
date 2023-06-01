@@ -1,54 +1,53 @@
 import styled from 'styled-components/native';
 import { ScrollView } from 'react-native';
-import { getThemeList, ThemeListType } from '@/api/ThemeAPI';
-import GameButtonComponent from '@/components/theme/ThemeGameButton';
-import Icon from 'react-native-vector-icons/Entypo';
+import ThemeGameButton from '@/components/theme/ThemeGameButton';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
+import { getThemeGames } from '@/api/ThemeAPI';
 
 interface ThemeProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
-    route: {
-        params: {
-            id : string,
-            name: string,
-            icon: string,
-        }
-    }
 }
 
-const Theme = ({navigation, route}: ThemeProps) => {
-    const {id, name, icon} = route.params;
-    // 테마 id 를 통해서 함수API 데이터 받아오기 (다음에 할 것) / getThemeInfo() 함수
-    const themeData : ThemeListType[] = getThemeList();
-    return (
-        <ThemeContainer>
-            <ScrollView>
-                <ThemeTitleContainer>
-                    <ThemeTitle>{`# ${name}  `}</ThemeTitle>
-                    <Icon name={icon} size={25} />
-                </ThemeTitleContainer>
+const Theme = ({ navigation }: ThemeProps) => {
+	const themeGames = getThemeGames();
 
-                {themeData.map(({id, title, tags}) => (
-                    <GameButtonComponent key={id} navigation={navigation} id={id} title={title} tags={tags}/>
-                ))}
-            </ScrollView>
-        </ThemeContainer>
-    );
-}
+	return (
+		<ScrollView>
+			<ThemeContainer>
+				<ThemeTitleContainer>
+					{/* <ThemeTitle>{`# ${title}`}</ThemeTitle> */}
+					<ThemeTitle>{`# 사랑 / 결혼`}</ThemeTitle>
+				</ThemeTitleContainer>
+
+				<ThemeGames>
+					{themeGames.map(({ id, title, description }) => (
+						<ThemeGameButton key={id} title={title} description={description} />
+					))}
+				</ThemeGames>
+			</ThemeContainer>
+		</ScrollView>
+	);
+};
 
 export default Theme;
 
 const ThemeContainer = styled.View`
-    background-color: white;
-    margin: 5px; 10px;
+	min-height: 100%;
+	background-color: white;
+	padding: 16px;
 `;
+
 const ThemeTitleContainer = styled.Text`
-    display: flex;
-    font-size: 25px;
-    font-weight: bold;
-    color: black;
-    margin: 5px 5px;
+	display: flex;
+	font-size: 25px;
+	font-weight: bold;
+	color: black;
+	margin: 5px 5px 10px 5px;
 `;
-const ThemeTitle = styled.Text`
+
+const ThemeTitle = styled.Text``;
+
+const ThemeGames = styled.View`
+	gap: 14px;
 `;

@@ -1,25 +1,17 @@
 import styled from 'styled-components/native';
 
 interface TitleProps {
-    title: string;
+	title: string;
 }
 
-const TitleComponent = ({title}: TitleProps) => {
-    return (
-        <TitleWrapper>
-            <Title>{title}</Title>
-        </TitleWrapper>
-    );
-}
+const TitleComponent = ({ title }: TitleProps) => {
+	return <Title>{title}</Title>;
+};
 
 export default TitleComponent;
 
-const TitleWrapper = styled.View`
-  margin-left: 15px;
-`;
-
 const Title = styled.Text`
-    color: black;
-    font-size: 20px;
-	font-weight: bold;
+	color: black;
+	font-size: 24px;
+	font-weight: 500;
 `;

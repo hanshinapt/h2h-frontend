@@ -8,6 +8,7 @@ import { StackParamList } from '@/App';
 import { getGameQuestions } from '@/api/GameQuestionAPI';
 import { deckIdState } from '@/store/GameStore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ImageComponent from '@/components/common/Image';
 
 interface GameQuestionProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
@@ -38,17 +39,24 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 			<GestureRecognizer
 				onSwipeLeft={() => dispatch('NEXT')}
 				onSwipeRight={() => dispatch('PREV')}>
+				<HeaderSection>
+					<ImageComponent
+						width={30}
+						height={30}
+						imageUrl={require('@assets/logo.png')}
+					/>
+					<QuestionIdx>{questionIdx + 1}번째 질문</QuestionIdx>
+				</HeaderSection>
 				<QuestionSection>
-					<QuestionIdx>{questionIdx + 1} 번째 질문</QuestionIdx>
 					<Question>{question}</Question>
 				</QuestionSection>
 
 				<ButtonsContainer>
 					<IconWrapper onPress={() => dispatch('PREV')}>
-						<Icon name="navigate-before" size={30} color="#51987F" />
+						<Icon name="navigate-before" size={30} />
 					</IconWrapper>
 					<IconWrapper onPress={() => dispatch('NEXT')}>
-						<Icon name="navigate-next" size={30} color="#51987F" />
+						<Icon name="navigate-next" size={30} />
 					</IconWrapper>
 				</ButtonsContainer>
 			</GestureRecognizer>
@@ -59,30 +67,39 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 export default GameQuestion;
 
 const GameQuestionContainer = styled.View`
-	flex: 1;
+	display: flex;
+	justify-content: space-between;
 	align-items: center;
-	background-color: #e6edea;
+	background-color: #ffffff;
+	padding: 24px 20px;
 `;
 
+const HeaderSection = styled.View`
+	height: 20%;
+	align-items: center;
+	gap: 12px;
+`;
+1;
+
 const QuestionSection = styled.View`
-	height: 80%;
+	height: 70%;
 	justify-content: center;
 	align-items: center;
-	padding: 0 10%;
 	gap: 24px;
 `;
 
 const QuestionIdx = styled.Text`
-	font-size: 20px;
+	font-size: 18px;
 `;
 
 const Question = styled.Text`
-	font-size: 16px;
-	color: #51987f;
+	text-align: center;
+	font-size: 18px;
+	line-height: 24px;
 `;
 
 const ButtonsContainer = styled.View`
-	height: 20%;
+	height: 10%;
 	flex-direction: row;
 	justify-content: center;
 	gap: 60px;
@@ -94,5 +111,5 @@ const IconWrapper = styled.TouchableOpacity`
 	width: 50px;
 	height: 50px;
 	border-radius: 25px;
-	background-color: white;
+	background-color: #f0f9f4;
 `;

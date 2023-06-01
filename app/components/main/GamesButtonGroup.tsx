@@ -3,15 +3,16 @@ import styled from 'styled-components/native';
 import { GamesInfoType, TagsType } from '@/api/MainBestGamesAPI';
 import { Image, ImageSourcePropType } from 'react-native';
 import TitleComponent from './Title';
+import ImageComponent from '../common/Image';
 
 interface GamseButtonGroupProps {
-    title: string;
-    games: GamesInfoType[];
+	title: string;
+	games: GamesInfoType[];
 }
 
 interface GameButtonProps {
-    name: string;
-    tags: TagsType[];
+	name: string;
+	description: string;
 }
 
 interface ImageComponentProps {
@@ -20,97 +21,83 @@ interface ImageComponentProps {
 	height?: number;
 }
 
-const GamesButtonGroupComponent = ({title, games}: GamseButtonGroupProps) => {
-    return (
-        <GamesButtonGroupContainer>
-            <TitleComponent title={title}/>
-
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}>
-                {games.map(({id, title, tags})=> (
-                    <GameButtonComponent key={id} name={title} tags={tags} />
-                ))}
-            </ScrollView>
-        </GamesButtonGroupContainer>
-    );
-};
-
-const GameButtonComponent = ({name, tags}: GameButtonProps) => {
-    return (
-        <ButtonWrapper>
-            
-            <ImageComponent imageUrl={require(`@assets/traveling/traveling1.jpg`)}/>
-
-            <ButtonNameWrapper> 
-                <ButtonName numberOfLines={2} ellipsizeMode="tail">{name}</ButtonName>
-            </ButtonNameWrapper>
-
-            <ButtonTagsWrapper>
-                {tags.map(({id, name}) => (
-                    <ButtonTag key={id}>{`#${name}`}</ButtonTag>
-                ))}
-            </ButtonTagsWrapper>
-            
-
-        </ButtonWrapper>
-    );
-};
-
-const ImageComponent = ({ imageUrl, width, height }: ImageComponentProps) => {
+const GamesCardGroup = ({ title, games }: GamseButtonGroupProps) => {
 	return (
-		<ImageWrapper>
-			<Image
-				source={imageUrl}
-				style={{ width: width ?? '100%', height: height ?? '100%' }}
-				resizeMode="contain"
-                borderRadius={10}
-			/>
-		</ImageWrapper>
+		<GamesCardGroupContainer>
+			<TitleComponent title={title} />
+			<Description>
+				HeartToHeart에서 가장 인기 있는 게임을 만나보세요.
+			</Description>
+			<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+				<CardsWrapper>
+					{games.map(({ id, title, description }) => (
+						<CardComponent key={id} name={title} description={description} />
+					))}
+				</CardsWrapper>
+			</ScrollView>
+		</GamesCardGroupContainer>
 	);
 };
-export default GamesButtonGroupComponent;
 
-const GamesButtonGroupContainer = styled.View`
-    background-color: #F1F6F9;
-    margin: 5px 3px;
-    padding: 5px 3px;
-    border-radius: 10px;
+const CardComponent = ({ name, description }: GameButtonProps) => {
+	return (
+		<CardContainer>
+			<ImageWrapper>
+				<ImageComponent
+					imageUrl={require(`@assets/traveling/traveling1.jpg`)}
+				/>
+			</ImageWrapper>
+
+			<CardTitle numberOfLines={2} ellipsizeMode="tail">
+				{name}
+			</CardTitle>
+
+			<CardDesc numberOfLines={3} ellipsizeMode="tail">
+				{description}
+			</CardDesc>
+		</CardContainer>
+	);
+};
+
+export default GamesCardGroup;
+
+const GamesCardGroupContainer = styled.View`
+	width: 100%;
+	margin: 40px 0 0 0;
 `;
-const ButtonWrapper = styled.View`
-    display: flex;
-    justify-content: space-between;
-    width: 130px;
-    height: 150px;
- 	background-color: #F99B7D;
-	border-radius: 10px;
-    padding: 15px 10px;
-    margin: 5px 10px;
+
+const Description = styled.Text`
+	font-weight: 300;
 `;
-const ImageWrapper = styled.View`
-    width: 45px;
-    height: 45px;
+
+const CardContainer = styled.View`
+	gap: 8px;
+	width: 130px;
+	height: 160px;
+	border-radius: 8px;
+	padding: 10px;
+	background-color: #f3f3f3;
 `;
-const ButtonNameWrapper = styled.View`
-    height: 30%;
-    justify-content: center;
-	align-items: center;
-`;
-const ButtonName = styled.Text`
-    color: white;
-    font-size: 13px;
-    font-weight: bold;
-    text-align: center;
-`;
-const ButtonTagsWrapper = styled.View`
-    display: flex;
+
+const CardsWrapper = styled.View`
+	margin: 20px 0;
+	display: flex;
 	flex-direction: row;
-    justify-content: space-evenly;
-	align-items: center;
-    height: 15%;
+	gap: 20px;
 `;
-const ButtonTag = styled.Text`
-    color: white;
-    font-size: 10px;
-	font-weight: bold;
+
+const ImageWrapper = styled.View`
+	width: 40px;
+	height: 40px;
+`;
+
+const CardTitle = styled.Text`
+	color: black;
+	font-size: 16px;
+	font-weight: 600;
+`;
+
+const CardDesc = styled.Text`
+	font-size: 14px;
+	font-weight: 300;
 `;

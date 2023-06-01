@@ -1,101 +1,63 @@
 import styled from 'styled-components/native';
-import { Image, ImageSourcePropType } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StackParamList } from '@/App';
-import { useSetRecoilState } from 'recoil';
-import { deckIdState } from '@/store/GameStore';
+import ImageComponent from '@/components/common/Image';
 
 interface GameButtonProps {
-	navigation: NativeStackNavigationProp<StackParamList>;
-    id : string;
-    title: string;
-    tags: TagsType[];
+	title: string;
+	description?: string;
 }
 
-interface TagsType {
-	id: string;
-	name: string;
-}
-
-interface ImageComponentProps {
-	imageUrl: ImageSourcePropType;
-	width?: number;
-	height?: number;
-}
-
-const GameButtonComponent = ({navigation, id, title, tags}: GameButtonProps) => {
-	const setDeckId = useSetRecoilState(deckIdState);
-
-    const handlePressGame = () => {
-        navigation.navigate('GameEntry');
-		setDeckId(id);
-    }
-    return (
-        <ButtonWrapper onPress={handlePressGame}>
-            
-            <ImageComponent imageUrl={require(`@assets/traveling/traveling1.jpg`)}/>
-            
-            <ButtonNameTagWrapper>
-                <ButtonNameWrapper>
-                    <ButtonName>{title}</ButtonName>
-                </ButtonNameWrapper>
-                <ButtonTagWrapper>
-                    {tags.map(({id, name}) => (
-                        <ButtonTag key={id}>{`#${name}`}</ButtonTag>
-                    ))}
-                </ButtonTagWrapper>
-            </ButtonNameTagWrapper>
-            
-            <Icon name="navigate-next" size={30}/>
-        
-        </ButtonWrapper>
-    );
-};
-
-const ImageComponent = ({ imageUrl, width, height }: ImageComponentProps) => {
+const ThemeButton = ({ title, description }: GameButtonProps) => {
 	return (
-		<ImageWrapper>
-			<Image
-				source={imageUrl}
-				style={{ width: width ?? '100%', height: height ?? '100%' }}
-				resizeMode="contain"
-                borderRadius={10}
-			/>
-		</ImageWrapper>
+		<ThemeButtonContainer>
+			<ImageWrapper>
+				<ImageComponent
+					width={70}
+					height={70}
+					imageUrl={require('@assets/traveling/traveling1.jpg')}
+				/>
+			</ImageWrapper>
+			<GameContentsContainer>
+				<GameName>{title}</GameName>
+				<GameDescription>{description}</GameDescription>
+			</GameContentsContainer>
+		</ThemeButtonContainer>
 	);
 };
-export default GameButtonComponent;
 
-const ButtonWrapper = styled.TouchableOpacity`
+export default ThemeButton;
+
+const ThemeButtonContainer = styled.View`
 	flex-direction: row;
-	justify-content: center;
-    align-items: center;
-    height: 80px;
- 	background-color: #F99B7D;
-	border-radius: 10px;
-    padding: 5px 5px;
-    margin: 5px 0px;
+	align-items: center;
+	width: 100%;
+	height: 90px;
+	padding: 10px;
+	gap: 10px;
+	border: 1px solid #e8e8e8;
+	border-radius: 8px;
 `;
+
 const ImageWrapper = styled.View`
-    width: 20%;
+	width: 70px;
+	height: 70px;
+	border-radius: 6px;
+	overflow: hidden;
 `;
-const ButtonNameTagWrapper = styled.View`
-    width: 70%;
-    padding: 0px 10px;
+
+const GameContentsContainer = styled.View`
+	height: 100%;
+	justify-content: flex-start;
+	word-break: break-all;
+	gap: 4px;
 `;
-const ButtonNameWrapper = styled.View`
-`;
-const ButtonName = styled.Text`
-    color: white;
-    font-weight: bold;
-`;
-const ButtonTagWrapper = styled.View`
-	flex-direction: row;
-`;
-const ButtonTag = styled.Text`
-    color: white;
-    font-size: 10px;
+
+const GameName = styled.Text`
+	color: #06ae53;
+	font-size: 16px;
 	font-weight: bold;
-    padding-right: 10px; 
+`;
+
+const GameDescription = styled.Text`
+	font-size: 14px;
+	color: #444444;
 `;
