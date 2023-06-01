@@ -1,6 +1,7 @@
 import { useReducer } from 'react';
 import styled from 'styled-components/native';
 import { useRecoilValue } from 'recoil';
+import GestureRecognizer from 'react-native-swipe-gestures';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
 
@@ -23,7 +24,7 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 				if (idx === 0) navigation.goBack(); // 게임 퇴장에 대한 alert
 			case 'NEXT':
 				if (idx < questions.length - 1) return idx + 1;
-				if (idx === questions.length - 1) navigation.navigate('Welcome'); // 게임 end에 대한 alert
+				if (idx === questions.length - 1) navigation.navigate('GameEnd');
 			default:
 				return 0;
 		}
@@ -34,19 +35,23 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 
 	return (
 		<GameQuestionContainer>
-			<QuestionSection>
-				<QuestionIdx>{questionIdx + 1} 번째 질문</QuestionIdx>
-				<Question>{question}</Question>
-			</QuestionSection>
+			<GestureRecognizer
+				onSwipeLeft={() => dispatch('NEXT')}
+				onSwipeRight={() => dispatch('PREV')}>
+				<QuestionSection>
+					<QuestionIdx>{questionIdx + 1} 번째 질문</QuestionIdx>
+					<Question>{question}</Question>
+				</QuestionSection>
 
-			<ButtonsContainer>
-				<IconWrapper onPress={() => dispatch('PREV')}>
-					<Icon name="navigate-before" size={30} color="#51987F" />
-				</IconWrapper>
-				<IconWrapper onPress={() => dispatch('NEXT')}>
-					<Icon name="navigate-next" size={30} color="#51987F" />
-				</IconWrapper>
-			</ButtonsContainer>
+				<ButtonsContainer>
+					<IconWrapper onPress={() => dispatch('PREV')}>
+						<Icon name="navigate-before" size={30} color="#51987F" />
+					</IconWrapper>
+					<IconWrapper onPress={() => dispatch('NEXT')}>
+						<Icon name="navigate-next" size={30} color="#51987F" />
+					</IconWrapper>
+				</ButtonsContainer>
+			</GestureRecognizer>
 		</GameQuestionContainer>
 	);
 };
