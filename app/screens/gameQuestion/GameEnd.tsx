@@ -1,7 +1,6 @@
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
 import { StackParamList } from '@/App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import ButtonComponent from '@/components/common/Button';
 import styled from 'styled-components/native';
 
 interface GameEndProps {
