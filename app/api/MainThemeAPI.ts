@@ -1,12 +1,12 @@
 export interface ThemeInfoType {
-    themeId: string;
-    themeName: string;
-    themeIcon: string;
+    id: string;
+    name: string;
+    icon: string;
 }
 
 type ThemeDataType = {
-    themeId: string;
-    themeName: string;
+    id: string;
+    name: string;
 }[];
 
 interface ThemeIconType {
@@ -15,52 +15,52 @@ interface ThemeIconType {
 
 const ThemeData: ThemeDataType = [
     {
-        themeId: 'asdfdasv666sdaf',
-        themeName: '여행',
+        id: 'asdfdasv666sdaf',
+        name: '여행',
     },
     {
-        themeId: 'sedsad123',
-        themeName: '사랑',
+        id: 'sedsad123',
+        name: '사랑',
     },
     {
-        themeId: 'dsfhg3423',
-        themeName: '취미',
+        id: 'dsfhg3423',
+        name: '취미',
     },
     {
-        themeId: '132r54ttgsd',
-        themeName: '자기개발',
+        id: '132r54ttgsd',
+        name: '자기개발',
     },
     {
-        themeId: 'afhrh5342',
-        themeName: '가치관',
+        id: 'afhrh5342',
+        name: '가치관',
     },
     {
-        themeId: 'gjlasl133',
-        themeName: '친구',
+        id: 'gjlasl133',
+        name: '친구',
     },
     {
-        themeId: 'dafkjl1344',
-        themeName: '가족',
+        id: 'dafkjl1344',
+        name: '가족',
     },
     {
-        themeId: 'cxznadsf123',
-        themeName: '커리어',
+        id: 'cxznadsf123',
+        name: '커리어',
     },
     {
-        themeId: 'cxznadsf3123',
-        themeName: '랜덤',
+        id: 'cxznadsf3123',
+        name: '랜덤',
     },
     {
-        themeId: 'cxznadsf1123',
-        themeName: '랜덤',
+        id: 'cxznadsf1123',
+        name: '랜덤',
     },
     {
-        themeId: 'cxznads5f123',
-        themeName: '랜덤',
+        id: 'cxznads5f123',
+        name: '랜덤',
     },
     {
-        themeId: 'cxznad7sf123',
-        themeName: '랜덤',
+        id: 'cxznad7sf123',
+        name: '랜덤',
     },
 ];
 
@@ -79,7 +79,7 @@ const ThemeIcon : ThemeIconType = {
 const ThemeInfo: ThemeInfoType[] = ThemeData.map((theme) => {
   return {
     ...theme,
-    themeIcon: ThemeIcon[theme.themeName],
+    icon: ThemeIcon[theme.name],
   };
 });
 

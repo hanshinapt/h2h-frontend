@@ -1,17 +1,21 @@
 import styled from 'styled-components/native';
-import { Image, ImageSourcePropType, Dimensions } from 'react-native';
+import { Image, ImageSourcePropType } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackParamList } from '@/App';
+import { useSetRecoilState } from 'recoil';
+import { deckIdState } from '@/store/GameStore';
 
 interface GameButtonProps {
-    name: string;
-    bgColor: string;
+	navigation: NativeStackNavigationProp<StackParamList>;
+    id : string;
+    title: string;
     tags: TagsType[];
 }
 
 interface TagsType {
-	tagId: string;
-	tagName: string;
+	id: string;
+	name: string;
 }
 
 interface ImageComponentProps {
@@ -20,19 +24,25 @@ interface ImageComponentProps {
 	height?: number;
 }
 
-const GameButtonComponent = ({name, tags, bgColor}: GameButtonProps) => {
+const GameButtonComponent = ({navigation, id, title, tags}: GameButtonProps) => {
+	const setDeckId = useSetRecoilState(deckIdState);
+
+    const handlePressGame = () => {
+        navigation.navigate('GameEntry');
+		setDeckId(id);
+    }
     return (
-        <ButtonWrapper bgColor={bgColor}>
+        <ButtonWrapper onPress={handlePressGame}>
             
             <ImageComponent imageUrl={require(`@assets/traveling/traveling1.jpg`)}/>
             
             <ButtonNameTagWrapper>
                 <ButtonNameWrapper>
-                    <ButtonName>{name}</ButtonName>
+                    <ButtonName>{title}</ButtonName>
                 </ButtonNameWrapper>
                 <ButtonTagWrapper>
-                    {tags.map(({tagId, tagName}) => (
-                        <ButtonTag key={tagId}>{`#${tagName}`}</ButtonTag>
+                    {tags.map(({id, name}) => (
+                        <ButtonTag key={id}>{`#${name}`}</ButtonTag>
                     ))}
                 </ButtonTagWrapper>
             </ButtonNameTagWrapper>
@@ -57,14 +67,12 @@ const ImageComponent = ({ imageUrl, width, height }: ImageComponentProps) => {
 };
 export default GameButtonComponent;
 
-const ButtonWrapper = styled.View<{
-    bgColor: string;
-}>`
+const ButtonWrapper = styled.TouchableOpacity`
 	flex-direction: row;
 	justify-content: center;
     align-items: center;
     height: 80px;
- 	background-color: ${props => props.bgColor};
+ 	background-color: #F99B7D;
 	border-radius: 10px;
     padding: 5px 5px;
     margin: 5px 0px;
