@@ -7,22 +7,28 @@ import { getThemeGames } from '@/api/ThemeAPI';
 
 interface ThemeProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
+	route: {
+        params: {
+            id : string,
+            name: string,
+        }
+    }
 }
 
-const Theme = ({ navigation }: ThemeProps) => {
+const Theme = ({ navigation, route }: ThemeProps) => {
+	const {id, name } = route.params; 
 	const themeGames = getThemeGames();
 
 	return (
 		<ScrollView>
 			<ThemeContainer>
 				<ThemeTitleContainer>
-					{/* <ThemeTitle>{`# ${title}`}</ThemeTitle> */}
-					<ThemeTitle>{`# 사랑 / 결혼`}</ThemeTitle>
+					<ThemeTitle>{`# ${name}`}</ThemeTitle>
 				</ThemeTitleContainer>
 
 				<ThemeGames>
 					{themeGames.map(({ id, title, description }) => (
-						<ThemeGameButton key={id} title={title} description={description} />
+						<ThemeGameButton key={id} navigation={navigation} id={id} title={title} description={description} />
 					))}
 				</ThemeGames>
 			</ThemeContainer>

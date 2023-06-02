@@ -11,10 +11,10 @@ import GameEnd from '@/screens/gameQuestion/GameEnd';
 export type StackParamList = {
 	Welcome: undefined;
 	Main: undefined;
+	Theme : {id: string, name: string};
 	GameEntry: undefined;
 	GameQuestion: undefined;
 	GameEnd: undefined;
-	Theme: undefined;
 };
 
 const App = () => {
