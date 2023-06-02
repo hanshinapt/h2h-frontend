@@ -1,14 +1,26 @@
 import styled from 'styled-components/native';
 import ImageComponent from '@/components/common/Image';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackParamList } from '@/App';
+import { useSetRecoilState } from 'recoil';
+import { deckIdState } from '@/store/GameStore';
 
 interface GameButtonProps {
+	navigation: NativeStackNavigationProp<StackParamList>;
+	id : string;
 	title: string;
 	description?: string;
 }
 
-const ThemeButton = ({ title, description }: GameButtonProps) => {
+const ThemeButton = ({ navigation, id, title, description }: GameButtonProps) => {
+	const setDeckId = useSetRecoilState(deckIdState);
+
+	const handlePressGameEntry = () => {
+		navigation.navigate('GameEntry');
+		setDeckId(id);
+	}
 	return (
-		<ThemeButtonContainer>
+		<ThemeButtonContainer onPress={handlePressGameEntry}>
 			<ImageWrapper>
 				<ImageComponent
 					width={70}
@@ -26,7 +38,7 @@ const ThemeButton = ({ title, description }: GameButtonProps) => {
 
 export default ThemeButton;
 
-const ThemeButtonContainer = styled.View`
+const ThemeButtonContainer = styled.TouchableOpacity`
 	flex-direction: row;
 	align-items: center;
 	width: 100%;

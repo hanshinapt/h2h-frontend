@@ -20,12 +20,10 @@ const Main = ({ navigation }: MainProps) => {
 	return (
 		<ScrollView showsHorizontalScrollIndicator={false}>
 			<MainContainer>
-				<ThemeButtonGroupComponent />
-				<GamesButtonGroupComponent title="Best Games" games={bestGames} />
-				<GamesButtonGroupComponent title="Best Games" games={newGames} />
+				<ThemeButtonGroupComponent navigation={navigation}/>
+				<GamesButtonGroupComponent navigation={navigation} title="Best Games" games={bestGames} />
+				<GamesButtonGroupComponent navigation={navigation} title="New Games" games={newGames} />
 			</MainContainer>
-
-			<Button title="Theme" onPress={() => navigation.navigate('Theme')} />
 		</ScrollView>
 	);
 };

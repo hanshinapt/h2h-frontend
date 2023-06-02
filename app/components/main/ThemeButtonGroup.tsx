@@ -1,18 +1,20 @@
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Entypo';
 import { getThemes } from '@/api/MainThemeAPI';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackParamList } from '@/App';
 
-interface ThemeType {
-	themeId: string;
-	themeName: string;
-	themeIcon: string;
+interface ThemeButtonGroupProps {
+	navigation: NativeStackNavigationProp<StackParamList>;
 }
 interface ThemeButtonProps {
+	navigation: NativeStackNavigationProp<StackParamList>;
+	id : string;
 	name: string;
 	iconName: string;
 }
 
-const ThemeButtonGroupComponent = () => {
+const ThemeButtonGroupComponent = ({navigation}: ThemeButtonGroupProps) => {
 	const themes = getThemes();
 
 	return (
@@ -21,16 +23,20 @@ const ThemeButtonGroupComponent = () => {
 
 			<ThemeButtonSection>
 				{themes.map(({ id, name, icon }) => {
-					return <ThemeButtonComponent key={id} name={name} iconName={icon} />;
+					return <ThemeButtonComponent key={id} navigation={navigation} id={id} name={name} iconName={icon} />;
 				})}
 			</ThemeButtonSection>
 		</ThemeButtonGroupContainer>
 	);
 };
 
-const ThemeButtonComponent = ({ name, iconName }: ThemeButtonProps) => {
+const ThemeButtonComponent = ({ navigation, id, name, iconName }: ThemeButtonProps) => {
+	const handlePressTheme = (id: string, name: string) => {
+		navigation.navigate('Theme', {id, name});
+	}
+	
 	return (
-		<ThemeButton>
+		<ThemeButton onPress={() => handlePressTheme(id, name)}>
 			<Icon name={iconName} size={20} color="#06ae53" />
 			<ThemeButtonText>{name}</ThemeButtonText>
 		</ThemeButton>
