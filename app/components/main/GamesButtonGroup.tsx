@@ -1,37 +1,38 @@
 import { ScrollView } from 'react-native';
 import styled from 'styled-components/native';
-import { GamesInfoType, TagsType } from '@/api/MainBestGamesAPI';
-import { Image, ImageSourcePropType } from 'react-native';
+import { GamesInfoType } from '@/api/MainBestGamesAPI';
 import TitleComponent from './Title';
 import ImageComponent from '../common/Image';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackParamList } from '@/App';
+import { useSetRecoilState } from 'recoil';
+import { deckIdState } from '@/store/GameStore';
 
 interface GamseButtonGroupProps {
+    navigation: NativeStackNavigationProp<StackParamList>;
 	title: string;
 	games: GamesInfoType[];
 }
 
 interface GameButtonProps {
+    navigation: NativeStackNavigationProp<StackParamList>;
+	id: string;
 	name: string;
 	description: string;
 }
 
-interface ImageComponentProps {
-	imageUrl: ImageSourcePropType;
-	width?: number;
-	height?: number;
-}
-
-const GamesCardGroup = ({ title, games }: GamseButtonGroupProps) => {
+const GamesCardGroup = ({ navigation, title, games }: GamseButtonGroupProps) => {
 	return (
 		<GamesCardGroupContainer>
 			<TitleComponent title={title} />
 			<Description>
 				HeartToHeart에서 가장 인기 있는 게임을 만나보세요.
 			</Description>
+
 			<ScrollView horizontal showsHorizontalScrollIndicator={false}>
 				<CardsWrapper>
 					{games.map(({ id, title, description }) => (
-						<CardComponent key={id} name={title} description={description} />
+						<CardComponent key={id} navigation={navigation} id={id} name={title} description={description} />
 					))}
 				</CardsWrapper>
 			</ScrollView>
@@ -39,9 +40,15 @@ const GamesCardGroup = ({ title, games }: GamseButtonGroupProps) => {
 	);
 };
 
-const CardComponent = ({ name, description }: GameButtonProps) => {
+const CardComponent = ({ navigation, id, name, description }: GameButtonProps) => {
+	const setDeckId = useSetRecoilState(deckIdState);
+	
+	const handlePressCard = (id: string) => {
+        navigation.navigate('GameEntry');
+		setDeckId(id);
+    }
 	return (
-		<CardContainer>
+		<CardContainer onPress={() => handlePressCard(id)}>
 			<ImageWrapper>
 				<ImageComponent
 					imageUrl={require(`@assets/traveling/traveling1.jpg`)}
@@ -52,7 +59,7 @@ const CardComponent = ({ name, description }: GameButtonProps) => {
 				{name}
 			</CardTitle>
 
-			<CardDesc numberOfLines={3} ellipsizeMode="tail">
+			<CardDesc numberOfLines={2} ellipsizeMode="tail">
 				{description}
 			</CardDesc>
 		</CardContainer>
@@ -70,7 +77,7 @@ const Description = styled.Text`
 	font-weight: 300;
 `;
 
-const CardContainer = styled.View`
+const CardContainer = styled.TouchableOpacity`
 	gap: 8px;
 	width: 130px;
 	height: 160px;
