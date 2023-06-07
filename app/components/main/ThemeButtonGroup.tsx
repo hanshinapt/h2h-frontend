@@ -1,8 +1,9 @@
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Entypo';
-import { getThemes } from '@/api/MainThemeAPI';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
+import { getTheme, ThemeInfoType } from '@/api/MainThemeAPI';
+import { useEffect, useState } from 'react';
 
 interface ThemeButtonGroupProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
@@ -15,18 +16,29 @@ interface ThemeButtonProps {
 }
 
 const ThemeButtonGroupComponent = ({navigation}: ThemeButtonGroupProps) => {
-	const themes = getThemes();
+	const [themes, setThemes] = useState<ThemeInfoType[]>([]);
 
+	useEffect(() => {
+		fetchData();
+	},[]);
+
+	const fetchData = async () => {
+		try {
+      		const data: ThemeInfoType[] = await getTheme();
+			setThemes(data);
+    	} catch (error) {
+     	 	console.error(error);
+    	}
+	}
 	return (
-		<ThemeButtonGroupContainer>
-			<Header>안녕하세요! {'\n'} 대화하고 싶은 테마를 선택하세요.</Header>
-
-			<ThemeButtonSection>
-				{themes.map(({ id, name, icon }) => {
-					return <ThemeButtonComponent key={id} navigation={navigation} id={id} name={name} iconName={icon} />;
-				})}
-			</ThemeButtonSection>
-		</ThemeButtonGroupContainer>
+			<ThemeButtonGroupContainer>
+				<Header>안녕하세요! {'\n'} 대화하고 싶은 테마를 선택하세요.</Header>
+				<ThemeButtonSection>
+					{themes.map(({id, name, icon}) => {
+						return <ThemeButtonComponent key={id} navigation={navigation} id={id} name={name} iconName={icon} />;
+					})}
+				</ThemeButtonSection>
+			</ThemeButtonGroupContainer>
 	);
 };
 
