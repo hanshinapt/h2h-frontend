@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
-import { Image, ImageSourcePropType, Dimensions } from 'react-native';
+import { Image, ImageURISource } from 'react-native';
 
 interface ImageComponentProps {
-	imageUrl: ImageSourcePropType;
+	imageUrl: ImageURISource;
 	width?: number;
 	height?: number;
 }

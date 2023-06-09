@@ -4,17 +4,21 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
 import { useSetRecoilState } from 'recoil';
 import { deckIdState } from '@/store/GameStore';
+import { ImageURISource } from 'react-native';
 
 interface GameButtonProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
 	id : string;
 	title: string;
 	description?: string;
+	imageUrl: string;
 }
 
-const ThemeButton = ({ navigation, id, title, description }: GameButtonProps) => {
+const ThemeButton = ({ navigation, id, title, description, imageUrl }: GameButtonProps) => {
 	const setDeckId = useSetRecoilState(deckIdState);
-
+	const image: ImageURISource = {
+		uri: imageUrl
+	}
 	const handlePressGameEntry = () => {
 		navigation.navigate('GameEntry');
 		setDeckId(id);
@@ -25,7 +29,7 @@ const ThemeButton = ({ navigation, id, title, description }: GameButtonProps) =>
 				<ImageComponent
 					width={70}
 					height={70}
-					imageUrl={require('@assets/traveling/traveling1.jpg')}
+					imageUrl={image}
 				/>
 			</ImageWrapper>
 			<GameContentsContainer>

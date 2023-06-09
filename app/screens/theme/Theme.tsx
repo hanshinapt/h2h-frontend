@@ -4,6 +4,7 @@ import ThemeGameButton from '@/components/theme/ThemeGameButton';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
 import { getThemeGames } from '@/api/ThemeAPI';
+import { useEffect, useState } from 'react';
 
 interface ThemeProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
@@ -17,7 +18,20 @@ interface ThemeProps {
 
 const Theme = ({ navigation, route }: ThemeProps) => {
 	const {id, name } = route.params; 
-	const themeGames = getThemeGames();
+	const [games, setGames] = useState([]);
+	
+	useEffect(() => {
+		fetchData();
+	}, []);
+
+	const fetchData = async () => {
+		try {
+			const data = await getThemeGames(id);
+			setGames(data);
+		} catch (error) {
+     	 	console.error(error);
+    	}
+	}
 
 	return (
 		<ScrollView>
@@ -27,8 +41,8 @@ const Theme = ({ navigation, route }: ThemeProps) => {
 				</ThemeTitleContainer>
 
 				<ThemeGames>
-					{themeGames.map(({ id, title, description }) => (
-						<ThemeGameButton key={id} navigation={navigation} id={id} title={title} description={description} />
+					{games.map(({ id, title, description, imageUrl }) => (
+						<ThemeGameButton key={id} navigation={navigation} id={id} title={title} description={description} imageUrl={imageUrl} />
 					))}
 				</ThemeGames>
 			</ThemeContainer>
