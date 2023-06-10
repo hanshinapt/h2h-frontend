@@ -1,10 +1,9 @@
-import { useReducer } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import styled from 'styled-components/native';
 import { useRecoilValue } from 'recoil';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
-
 import { getGameQuestions } from '@/api/GameQuestionAPI';
 import { deckIdState } from '@/store/GameStore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -14,25 +13,57 @@ interface GameQuestionProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
 }
 
+interface QuestionsProps {
+	id: string;
+	title: string;
+	description: string;
+	tagIds: [string];
+	imageUrl: string;
+	questions: QuestionType[];
+	createdAt: string;
+	createdBy: string;
+	playedCount: string;
+}
+
+interface QuestionType {
+	content: string;
+}
+
 const GameQuestion = ({ navigation }: GameQuestionProps) => {
 	const deckId = useRecoilValue(deckIdState);
-	const { questions } = getGameQuestions(deckId);
+	const [questions, setQuestions] = useState<QuestionsProps | null>(null);
+
+	useEffect(() => {
+		fetchData();
+	}, []);
+
+	const fetchData = async () => {
+		try {
+			const data = await getGameQuestions(deckId);
+			setQuestions(data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	const idxReducer = (idx: number, type: 'PREV' | 'NEXT') => {
 		switch (type) {
 			case 'PREV':
 				if (idx > 0) return idx - 1;
-				if (idx === 0) navigation.goBack(); // 게임 퇴장에 대한 alert
+				if (idx === 0) navigation.goBack();
 			case 'NEXT':
-				if (idx < questions.length - 1) return idx + 1;
-				if (idx === questions.length - 1) navigation.navigate('GameEnd');
+				if (questions && idx < questions.questions.length - 1) return idx + 1;
+				if (questions && idx === questions.questions.length - 1)
+					navigation.navigate('GameEnd');
 			default:
 				return 0;
 		}
 	};
 	const [questionIdx, dispatch] = useReducer(idxReducer, 0);
 
-	const question = questions.find((item, idx) => idx === questionIdx)?.content;
+	const question = questions?.questions.find(
+		(item, idx) => idx === questionIdx
+	)?.content;
 
 	return (
 		<GameQuestionContainer>
