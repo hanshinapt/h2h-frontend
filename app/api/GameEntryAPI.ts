@@ -1,49 +1,22 @@
-export interface GameInfoType {
-	id: string;
-	title: string;
-	description: string;
-	tags: TagsType[];
-	questions: QuestionType[];
-	createdAt: string;
+import { useRecoilValue } from 'recoil';
+import { deckIdState } from '@/store/GameStore';
+
+export const useGameInfo = () => {
+	const setDeckId = useRecoilValue(deckIdState);
+	
+	const getGameInfo = async () => {
+		try {
+			const response = await fetch(`http://ec2-18-222-196-33.us-east-2.compute.amazonaws.com:8080/api/v1/decks/${setDeckId}`)
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			const data = await response.json();
+			return data;
+		}
+		catch (error) {
+			console.error(error);
+			throw error;
+		}
+	}
+	return getGameInfo;
 }
-
-interface TagsType {
-	id: string;
-	name: string;
-}
-
-interface QuestionType {
-	content: string;
-}
-
-const GameInfoTempData = {
-	id: '6abcdaaetawetawetawe',
-	title: '연인을 위한 대화카드',
-	description: '커플끼리 해보면 좋을 대화카드입니다.',
-	tags: [
-		{
-			id: 'tagId1',
-			name: '사랑',
-		},
-		{
-			id: 'tagId2',
-			name: '결혼',
-		},
-	],
-	questions: [
-		{
-			content: '현재 나의 최대 관심사는 무엇인가요?',
-		},
-		{
-			content: '현재 나의 최대 관심사는 무엇인가요?',
-		},
-		{
-			content: '현재 나의 최대 관심사는 무엇인가요?',
-		},
-	],
-	createdAt: '2023-03-12',
-};
-
-export const getGameInfo = (): GameInfoType => {
-	return GameInfoTempData;
-};

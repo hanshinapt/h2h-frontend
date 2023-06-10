@@ -1,69 +1,73 @@
 import { ScrollView, Text } from 'react-native';
-import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
-import { getGameInfo } from '@/api/GameEntryAPI';
 import ImageComponent from '@/components/common/Image';
 import ChipComponent from '@/components/gameEntry/Chip';
-import { deckIdState } from '@/store/GameStore';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useGameInfo } from '@/api/GameEntryAPI';
+import { useEffect, useState } from 'react';
+import { ImageURISource } from 'react-native';
 
 interface GameEntryProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
 }
 
-const GameEntry = ({ navigation }: GameEntryProps) => {
-	const { id, title, tags, description } = getGameInfo();
-	const setDeckId = useSetRecoilState(deckIdState);
+interface GameContentsProps {
+  gameInfo: GameInfoProps;
+}
 
+interface GameInfoProps {
+	id : string;
+	title: string;
+	description: string;
+	tagIds: [string];
+	imageUrl: string;
+	questions: QuestionType[];
+	createdAt: string;
+	createdBy: string;
+	playedCount: string;
+}
+
+interface QuestionType {
+	content: string;
+}
+
+
+// api GET 할때, tagIds (주어진 tag api랑 다름)
+const GameEntry = ({ navigation }: GameEntryProps) => {
 	const goToGameQuestionPage = () => {
 		navigation.navigate('GameQuestion');
 	};
 
 	const handlePressPlayGame = () => {
 		goToGameQuestionPage();
-		setDeckId(id);
 	};
+
+	const getGameInfo = useGameInfo();
+  	const [gameInfo, setGameInfo] = useState<GameInfoProps | null>(null);
+
+	useEffect(() => {
+		fetchData();
+	}, []);
+
+	const fetchData = async () => {
+		try {
+			const data = await getGameInfo();
+			setGameInfo(data);
+		} catch (error) {
+			console.error(error);
+    	} 
+	}
+
 
 	return (
 		<GameEntryContainer>
 			<ArrowBackButton onPress={navigation.goBack}>
 				<Icon name="arrow-back-outline" size={20} color="#a1a1a1" />
 			</ArrowBackButton>
-
-			<GameContentsWrapper>
-				<ImageComponent
-					width={30}
-					height={30}
-					imageUrl={require('@assets/logo.png')}
-				/>
-				<GameImageWrapper>
-					<ImageComponent imageUrl={require('@assets/love/love1.jpg')} />
-				</GameImageWrapper>
-				<GameTitle>{title}</GameTitle>
-
-				<GameChipsWrapper>
-					<ScrollView
-						horizontal
-						showsHorizontalScrollIndicator={false}
-						contentContainerStyle={{ gap: 16 }}>
-						{tags.map(({ id, name }) => (
-							<ChipComponent key={id} borderColor="#06AE53">
-								<ChipContents>
-									<ImageComponent
-										width={13}
-										height={13}
-										imageUrl={require('@assets/hashTag.jpg')}
-									/>
-									<ChipText>{name}</ChipText>
-								</ChipContents>
-							</ChipComponent>
-						))}
-					</ScrollView>
-				</GameChipsWrapper>
-				<GameDesc>{description}</GameDesc>
-			</GameContentsWrapper>
+			
+			{gameInfo && <GameContents gameInfo={gameInfo} />}
 
 			<PlayButton onPress={handlePressPlayGame}>
 				<PlayButtonText>게임 진행하기</PlayButtonText>
@@ -71,6 +75,46 @@ const GameEntry = ({ navigation }: GameEntryProps) => {
 		</GameEntryContainer>
 	);
 };
+
+const GameContents = ({ gameInfo }: GameContentsProps ) => {
+	const image: ImageURISource = {
+		uri: gameInfo.imageUrl
+	}
+	return (
+		<GameContentsWrapper>
+			<ImageComponent
+				width={30}
+				height={30}
+				imageUrl={require('@assets/logo.png')}
+			/>
+			<GameImageWrapper>
+				<ImageComponent imageUrl={image} />
+			</GameImageWrapper>
+			<GameTitle>{gameInfo.title}</GameTitle>
+
+			{/* <GameChipsWrapper>
+				<ScrollView
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					contentContainerStyle={{ gap: 16 }}>
+					{tags.map(({ id, name }) => (
+						<ChipComponent key={id} borderColor="#06AE53">
+							<ChipContents>
+								<ImageComponent
+									width={13}
+									height={13}
+									imageUrl={require('@assets/hashTag.jpg')}
+								/>
+								<ChipText>{name}</ChipText>
+							</ChipContents>
+						</ChipComponent>
+					))}
+				</ScrollView>
+			</GameChipsWrapper> */}
+			<GameDesc>{gameInfo.description}</GameDesc>
+		</GameContentsWrapper>
+	)
+}
 
 export default GameEntry;
 
