@@ -14,11 +14,11 @@ interface GameEntryProps {
 }
 
 interface GameContentsProps {
-  gameInfo: GameInfoProps;
+	gameInfo: GameInfoProps;
 }
 
 interface GameInfoProps {
-	id : string;
+	id: string;
 	title: string;
 	description: string;
 	tagIds: [string];
@@ -33,7 +33,6 @@ interface QuestionType {
 	content: string;
 }
 
-
 // api GET 할때, tagIds (주어진 tag api랑 다름)
 const GameEntry = ({ navigation }: GameEntryProps) => {
 	const goToGameQuestionPage = () => {
@@ -45,7 +44,7 @@ const GameEntry = ({ navigation }: GameEntryProps) => {
 	};
 
 	const getGameInfo = useGameInfo();
-  	const [gameInfo, setGameInfo] = useState<GameInfoProps | null>(null);
+	const [gameInfo, setGameInfo] = useState<GameInfoProps | null>(null);
 
 	useEffect(() => {
 		fetchData();
@@ -57,17 +56,17 @@ const GameEntry = ({ navigation }: GameEntryProps) => {
 			setGameInfo(data);
 		} catch (error) {
 			console.error(error);
-    	} 
-	}
-
+		}
+	};
 
 	return (
 		<GameEntryContainer>
 			<ArrowBackButton onPress={navigation.goBack}>
-				<Icon name="arrow-back-outline" size={20} color="#a1a1a1" />
+				<Icon name="arrow-back-outline" size={30} color="#a1a1a1" />
 			</ArrowBackButton>
-			
-			{gameInfo && <GameContents gameInfo={gameInfo} />}
+			<GameContentsContaner>
+				{gameInfo && <GameContents gameInfo={gameInfo} />}
+			</GameContentsContaner>
 
 			<PlayButton onPress={handlePressPlayGame}>
 				<PlayButtonText>게임 진행하기</PlayButtonText>
@@ -76,10 +75,10 @@ const GameEntry = ({ navigation }: GameEntryProps) => {
 	);
 };
 
-const GameContents = ({ gameInfo }: GameContentsProps ) => {
+const GameContents = ({ gameInfo }: GameContentsProps) => {
 	const image: ImageURISource = {
-		uri: gameInfo.imageUrl
-	}
+		uri: gameInfo.imageUrl,
+	};
 	return (
 		<GameContentsWrapper>
 			<ImageComponent
@@ -113,8 +112,8 @@ const GameContents = ({ gameInfo }: GameContentsProps ) => {
 			</GameChipsWrapper> */}
 			<GameDesc>{gameInfo.description}</GameDesc>
 		</GameContentsWrapper>
-	)
-}
+	);
+};
 
 export default GameEntry;
 
@@ -130,10 +129,15 @@ const GameEntryContainer = styled.View`
 `;
 
 const ArrowBackButton = styled.TouchableOpacity`
+	z-index: 1;
 	position: absolute;
 	top: 0;
 	left: 0;
 	padding: 16px;
+`;
+
+const GameContentsContaner = styled.View`
+	flex: 3;
 `;
 
 const GameTitle = styled.Text`

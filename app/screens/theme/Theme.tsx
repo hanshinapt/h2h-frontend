@@ -1,25 +1,26 @@
 import styled from 'styled-components/native';
 import { ScrollView } from 'react-native';
-import ThemeGameButton from '@/components/theme/ThemeGameButton';
+import { useEffect, useState } from 'react';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
+import ThemeGameButton from '@/components/theme/ThemeGameButton';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { getThemeGames } from '@/api/ThemeAPI';
-import { useEffect, useState } from 'react';
 
 interface ThemeProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
 	route: {
-        params: {
-            id : string,
-            name: string,
-        }
-    }
+		params: {
+			id: string;
+			name: string;
+		};
+	};
 }
 
 const Theme = ({ navigation, route }: ThemeProps) => {
-	const {id, name } = route.params; 
+	const { id, name } = route.params;
 	const [games, setGames] = useState([]);
-	
+
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -29,24 +30,35 @@ const Theme = ({ navigation, route }: ThemeProps) => {
 			const data = await getThemeGames(id);
 			setGames(data);
 		} catch (error) {
-     	 	console.error(error);
-    	}
-	}
+			console.error(error);
+		}
+	};
 
 	return (
-		<ScrollView>
-			<ThemeContainer>
+		<ThemeContainer>
+			<ScrollView>
+				<ArrowBackButton onPress={navigation.goBack}>
+					<Icon name="arrow-back-outline" size={30} color="#a1a1a1" />
+				</ArrowBackButton>
+
 				<ThemeTitleContainer>
 					<ThemeTitle>{`# ${name}`}</ThemeTitle>
 				</ThemeTitleContainer>
 
 				<ThemeGames>
 					{games.map(({ id, title, description, imageUrl }) => (
-						<ThemeGameButton key={id} navigation={navigation} id={id} title={title} description={description} imageUrl={imageUrl} />
+						<ThemeGameButton
+							key={id}
+							navigation={navigation}
+							id={id}
+							title={title}
+							description={description}
+							imageUrl={imageUrl}
+						/>
 					))}
 				</ThemeGames>
-			</ThemeContainer>
-		</ScrollView>
+			</ScrollView>
+		</ThemeContainer>
 	);
 };
 
@@ -58,16 +70,24 @@ const ThemeContainer = styled.View`
 	padding: 16px;
 `;
 
-const ThemeTitleContainer = styled.Text`
+const ArrowBackButton = styled.TouchableOpacity`
+	z-index: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
+`;
+
+const ThemeTitleContainer = styled.View`
 	display: flex;
-	font-size: 25px;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
+`;
+
+const ThemeTitle = styled.Text`
+	font-size: 23px;
 	font-weight: bold;
 	color: black;
-	margin: 5px 5px 10px 5px;
 `;
 
-const ThemeTitle = styled.Text``;
-
-const ThemeGames = styled.View`
-	gap: 14px;
-`;
+const ThemeGames = styled.View``;
