@@ -11,7 +11,7 @@ import GameEnd from '@/screens/gameQuestion/GameEnd';
 export type StackParamList = {
 	Welcome: undefined;
 	Main: undefined;
-	Theme: { id: string; name: string };
+	Theme: undefined;
 	GameEntry: undefined;
 	GameQuestion: undefined;
 	GameEnd: undefined;

@@ -1,11 +1,10 @@
-import { useEffect, useState, useReducer } from 'react';
+import { useReducer } from 'react';
 import styled from 'styled-components/native';
 import { useRecoilValue } from 'recoil';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
-import { getGameQuestions } from '@/api/GameQuestionAPI';
-import { deckIdState } from '@/store/GameStore';
+import { questionsState } from '@/store/GameStore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageComponent from '@/components/common/Image';
 
@@ -30,21 +29,7 @@ interface QuestionType {
 }
 
 const GameQuestion = ({ navigation }: GameQuestionProps) => {
-	const deckId = useRecoilValue(deckIdState);
-	const [questions, setQuestions] = useState<QuestionsProps | null>(null);
-
-	useEffect(() => {
-		fetchData();
-	}, []);
-
-	const fetchData = async () => {
-		try {
-			const data = await getGameQuestions(deckId);
-			setQuestions(data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
+	const questions = useRecoilValue(questionsState);
 
 	const idxReducer = (idx: number, type: 'PREV' | 'NEXT') => {
 		switch (type) {
@@ -52,18 +37,16 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 				if (idx > 0) return idx - 1;
 				if (idx === 0) navigation.goBack();
 			case 'NEXT':
-				if (questions && idx < questions.questions.length - 1) return idx + 1;
-				if (questions && idx === questions.questions.length - 1)
+				if (questions && idx < questions.length - 1) return idx + 1;
+				if (questions && idx === questions.length - 1)
 					navigation.navigate('GameEnd');
 			default:
 				return 0;
 		}
 	};
-	const [questionIdx, dispatch] = useReducer(idxReducer, 0);
 
-	const question = questions?.questions.find(
-		(item, idx) => idx === questionIdx
-	)?.content;
+	const [questionIdx, dispatch] = useReducer(idxReducer, 0);
+	const question = questions.find((item, idx) => idx === questionIdx)?.content;
 
 	return (
 		<GameQuestionContainer>
@@ -98,11 +81,10 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 export default GameQuestion;
 
 const GameQuestionContainer = styled.View`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	background-color: #ffffff;
-	padding: 24px 20px;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	padding: 60px 20px 10px;
 `;
 
 const HeaderSection = styled.View`

@@ -8,41 +8,42 @@ import { ImageURISource } from 'react-native';
 
 interface GameButtonProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
-	id : string;
+	id: string;
 	title: string;
 	description?: string;
 	imageUrl: string;
 }
 
-const ThemeButton = ({ navigation, id, title, description, imageUrl }: GameButtonProps) => {
+const GameButton = ({
+	navigation,
+	id,
+	title,
+	description,
+	imageUrl,
+}: GameButtonProps) => {
 	const setDeckId = useSetRecoilState(deckIdState);
-	const image: ImageURISource = {
-		uri: imageUrl
-	}
-	const handlePressGameEntry = () => {
+
+	const handlePressGame = () => {
 		navigation.navigate('GameEntry');
 		setDeckId(id);
-	}
+	};
+
 	return (
-		<ThemeButtonContainer onPress={handlePressGameEntry}>
+		<GameButtonContainer onPress={handlePressGame}>
 			<ImageWrapper>
-				<ImageComponent
-					width={70}
-					height={70}
-					imageUrl={image}
-				/>
+				<ImageComponent width={70} height={70} imageUrl={{ uri: imageUrl }} />
 			</ImageWrapper>
 			<GameContentsContainer>
 				<GameName>{title}</GameName>
 				<GameDescription>{description}</GameDescription>
 			</GameContentsContainer>
-		</ThemeButtonContainer>
+		</GameButtonContainer>
 	);
 };
 
-export default ThemeButton;
+export default GameButton;
 
-const ThemeButtonContainer = styled.TouchableOpacity`
+const GameButtonContainer = styled.TouchableOpacity`
 	flex-direction: row;
 	align-items: center;
 	width: 100%;

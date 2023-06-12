@@ -1,17 +1,19 @@
+import { request } from './config';
+
 export interface ThemeInfoType {
 	id: string;
 	name: string;
 	icon: string;
-};
+}
 
-type ThemeDataType = {
+export type ThemeDataType = {
 	id: string;
 	name: string;
 };
 
 interface ThemeIconType {
 	[key: string]: string;
-};
+}
 
 const ThemeIcon: ThemeIconType = {
 	여행: 'aircraft',
@@ -26,24 +28,16 @@ const ThemeIcon: ThemeIconType = {
 	랜덤: 'help',
 };
 
-export const getTheme = async () => {
-	try {
-		const response = await fetch('http://ec2-18-222-196-33.us-east-2.compute.amazonaws.com:8080/api/v1/tags');
-		if (!response.ok) {
-      		throw new Error('Network response was not ok');
-    	}
-		const data = await response.json();
-		const themeData: ThemeDataType[] = data;
-		const themeInfo: ThemeInfoType[] = themeData.map((theme) => {
-			return {
-				...theme,
-				icon: ThemeIcon[theme.name]
-			}
-		});
-		return themeInfo;
-	}
-	catch (error) {
-		console.error(error);
-		throw error;
-	}
+export const getThemes = async () => {
+	const res = await request({
+		method: 'GET',
+		url: 'tags',
+	});
+
+	// 임시 코드
+	const temp = res.map((i: ThemeDataType) => {
+		return { ...i, icon: ThemeIcon[i.name] };
+	});
+
+	return temp;
 };

@@ -2,53 +2,65 @@ import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Entypo';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
-import { getTheme, ThemeInfoType } from '@/api/MainThemeAPI';
+import { getThemes, ThemeDataType, ThemeInfoType } from '@/api/MainThemeAPI';
 import { useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { tagState } from '@/store/GameStore';
 
 interface ThemeButtonGroupProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
 }
 interface ThemeButtonProps {
-	navigation: NativeStackNavigationProp<StackParamList>;
-	id : string;
+	id: string;
 	name: string;
 	iconName: string;
+	moveThemePage: ({ id, name }: ThemeDataType) => void;
 }
 
-const ThemeButtonGroupComponent = ({navigation}: ThemeButtonGroupProps) => {
+const ThemeButtonGroupComponent = ({ navigation }: ThemeButtonGroupProps) => {
 	const [themes, setThemes] = useState<ThemeInfoType[]>([]);
+	const setTag = useSetRecoilState(tagState);
+
+	const moveThemePage = ({ id, name }: ThemeDataType) => {
+		navigation.navigate('Theme');
+		setTag({ id, name });
+	};
+
+	const fetchThemes = async () => {
+		const data = await getThemes();
+		setThemes([...data]);
+	};
 
 	useEffect(() => {
-		fetchData();
-	},[]);
+		fetchThemes();
+	}, []);
 
-	const fetchData = async () => {
-		try {
-      		const data: ThemeInfoType[] = await getTheme();
-			setThemes(data);
-    	} catch (error) {
-     	 	console.error(error);
-    	}
-	}
 	return (
-			<ThemeButtonGroupContainer>
-				<Header>안녕하세요! {'\n'} 대화하고 싶은 테마를 선택하세요.</Header>
-				<ThemeButtonSection>
-					{themes.map(({id, name, icon}) => {
-						return <ThemeButtonComponent key={id} navigation={navigation} id={id} name={name} iconName={icon} />;
-					})}
-				</ThemeButtonSection>
-			</ThemeButtonGroupContainer>
+		<ThemeButtonGroupContainer>
+			<Header>안녕하세요! {'\n'} 대화하고 싶은 테마를 선택하세요.</Header>
+			<ThemeButtonSection>
+				{themes.map(({ id, name, icon }) => (
+					<ThemeButtonComponent
+						key={id}
+						id={id}
+						name={name}
+						iconName={icon}
+						moveThemePage={moveThemePage}
+					/>
+				))}
+			</ThemeButtonSection>
+		</ThemeButtonGroupContainer>
 	);
 };
 
-const ThemeButtonComponent = ({ navigation, id, name, iconName }: ThemeButtonProps) => {
-	const handlePressTheme = (id: string, name: string) => {
-		navigation.navigate('Theme', {id, name});
-	}
-	
+const ThemeButtonComponent = ({
+	id,
+	name,
+	iconName,
+	moveThemePage,
+}: ThemeButtonProps) => {
 	return (
-		<ThemeButton onPress={() => handlePressTheme(id, name)}>
+		<ThemeButton onPress={() => moveThemePage({ id, name })}>
 			<Icon name={iconName} size={20} color="#06ae53" />
 			<ThemeButtonText>{name}</ThemeButtonText>
 		</ThemeButton>
@@ -66,6 +78,7 @@ const Header = styled.Text`
 	font-size: 24px;
 	line-height: 36px;
 	text-align: center;
+	margin-bottom: 20px;
 `;
 
 const ThemeButtonSection = styled.View`
@@ -75,7 +88,6 @@ const ThemeButtonSection = styled.View`
 	justify-content: space-around;
 	width: 100%;
 	gap: 20px;
-	padding-top: 20px;
 `;
 
 const ThemeButton = styled.TouchableOpacity`

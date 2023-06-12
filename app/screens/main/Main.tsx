@@ -20,9 +20,17 @@ const Main = ({ navigation }: MainProps) => {
 	return (
 		<ScrollView showsHorizontalScrollIndicator={false}>
 			<MainContainer>
-				<ThemeButtonGroupComponent navigation={navigation}/>
-				<GamesButtonGroupComponent navigation={navigation} title="Best Games" games={bestGames} />
-				<GamesButtonGroupComponent navigation={navigation} title="New Games" games={newGames} />
+				<ThemeButtonGroupComponent navigation={navigation} />
+				<GamesButtonGroupComponent
+					navigation={navigation}
+					title="Best Games"
+					games={bestGames}
+				/>
+				<GamesButtonGroupComponent
+					navigation={navigation}
+					title="New Games"
+					games={newGames}
+				/>
 			</MainContainer>
 		</ScrollView>
 	);
@@ -31,6 +39,8 @@ const Main = ({ navigation }: MainProps) => {
 export default Main;
 
 const MainContainer = styled.View`
+	width: 100%;
+	height: 100%;
 	background-color: white;
-	padding: 20px;
+	padding: 50px 20px 0;
 `;

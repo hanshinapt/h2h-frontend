@@ -5,9 +5,12 @@ import { StackParamList } from '@/App';
 import ImageComponent from '@/components/common/Image';
 import ChipComponent from '@/components/gameEntry/Chip';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useGameInfo } from '@/api/GameEntryAPI';
+import { getGameInfo } from '@/api/GameAPI';
 import { useEffect, useState } from 'react';
 import { ImageURISource } from 'react-native';
+import ArrowBackButton from '@/components/common/ArrowBackButton';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { deckIdState, questionsState } from '@/store/GameStore';
 
 interface GameEntryProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
@@ -35,6 +38,10 @@ interface QuestionType {
 
 // api GET 할때, tagIds (주어진 tag api랑 다름)
 const GameEntry = ({ navigation }: GameEntryProps) => {
+	const [gameInfo, setGameInfo] = useState<GameInfoProps | null>(null);
+	const deckId = useRecoilValue(deckIdState);
+	const setQuestions = useSetRecoilState(questionsState);
+
 	const goToGameQuestionPage = () => {
 		navigation.navigate('GameQuestion');
 	};
@@ -43,27 +50,19 @@ const GameEntry = ({ navigation }: GameEntryProps) => {
 		goToGameQuestionPage();
 	};
 
-	const getGameInfo = useGameInfo();
-	const [gameInfo, setGameInfo] = useState<GameInfoProps | null>(null);
+	const fetchGameInfo = async () => {
+		const res = await getGameInfo(deckId);
+		setGameInfo(res);
+		setQuestions(res.questions);
+	};
 
 	useEffect(() => {
-		fetchData();
+		fetchGameInfo();
 	}, []);
-
-	const fetchData = async () => {
-		try {
-			const data = await getGameInfo();
-			setGameInfo(data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
 
 	return (
 		<GameEntryContainer>
-			<ArrowBackButton onPress={navigation.goBack}>
-				<Icon name="arrow-back-outline" size={30} color="#a1a1a1" />
-			</ArrowBackButton>
+			<ArrowBackButton onPressBackButton={() => navigation.goBack()} />
 			<GameContentsContaner>
 				{gameInfo && <GameContents gameInfo={gameInfo} />}
 			</GameContentsContaner>
@@ -76,9 +75,6 @@ const GameEntry = ({ navigation }: GameEntryProps) => {
 };
 
 const GameContents = ({ gameInfo }: GameContentsProps) => {
-	const image: ImageURISource = {
-		uri: gameInfo.imageUrl,
-	};
 	return (
 		<GameContentsWrapper>
 			<ImageComponent
@@ -87,7 +83,7 @@ const GameContents = ({ gameInfo }: GameContentsProps) => {
 				imageUrl={require('@assets/logo.png')}
 			/>
 			<GameImageWrapper>
-				<ImageComponent imageUrl={image} />
+				<ImageComponent imageUrl={{ uri: gameInfo.imageUrl }} />
 			</GameImageWrapper>
 			<GameTitle>{gameInfo.title}</GameTitle>
 
@@ -128,16 +124,8 @@ const GameEntryContainer = styled.View`
 	gap: 24px;
 `;
 
-const ArrowBackButton = styled.TouchableOpacity`
-	z-index: 1;
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding: 16px;
-`;
-
 const GameContentsContaner = styled.View`
-	flex: 3;
+	flex: 1;
 `;
 
 const GameTitle = styled.Text`
