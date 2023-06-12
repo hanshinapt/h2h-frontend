@@ -1,23 +1,15 @@
-const GameQuestionsTempData = {
-	deckId: '6abcdaaetawetawetawe',
-	title: '연인을 위한 대화카드',
-	questions: [
-		{
-			id: 0,
-			content:
-				'현재 나의 최대 관심사는 무엇인가요? 관심사에 어떻게 얼마나 투자하고 있으신가요?',
-		},
-		{
-			id: 1,
-			content: '현재 나의 최대 관심사는 무엇인가요?',
-		},
-		{
-			id: 2,
-			content: '관심사에 어떻게 얼마나 투자하고 있으신가요?',
-		},
-	],
-};
-
-export const getGameQuestions = (deckId: string) => {
-	return GameQuestionsTempData;
+export const getGameQuestions = async (deckId: string) => {
+	try {
+		const response = await fetch(
+			`http://ec2-18-222-196-33.us-east-2.compute.amazonaws.com:8080/api/v1/decks/${deckId}`
+		);
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };

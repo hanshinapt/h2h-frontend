@@ -11,7 +11,7 @@ import GameEnd from '@/screens/gameQuestion/GameEnd';
 export type StackParamList = {
 	Welcome: undefined;
 	Main: undefined;
-	Theme : {id: string, name: string};
+	Theme: { id: string; name: string };
 	GameEntry: undefined;
 	GameQuestion: undefined;
 	GameEnd: undefined;
@@ -29,11 +29,31 @@ const App = () => {
 						component={Welcome}
 						options={{ headerShown: false }}
 					/>
-					<Stack.Screen name="Main" component={Main} />
-					<Stack.Screen name="Theme" component={Theme} />
-					<Stack.Screen name="GameEntry" component={GameEntry} />
-					<Stack.Screen name="GameQuestion" component={GameQuestion} />
-					<Stack.Screen name="GameEnd" component={GameEnd} />
+					<Stack.Screen
+						name="Main"
+						component={Main}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="Theme"
+						component={Theme}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="GameEntry"
+						component={GameEntry}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="GameQuestion"
+						component={GameQuestion}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="GameEnd"
+						component={GameEnd}
+						options={{ headerShown: false }}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>
