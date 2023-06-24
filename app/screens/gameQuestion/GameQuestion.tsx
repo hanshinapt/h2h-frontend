@@ -1,31 +1,17 @@
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 import styled from 'styled-components/native';
 import { useRecoilValue } from 'recoil';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamList } from '@/App';
 import { questionsState } from '@/store/GameStore';
+import ArrowBackButton from '@/components/common/ArrowBackButton';
+import ArrowBackButtonModal from '@/components/common/Modal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ImageComponent from '@/components/common/Image';
 
 interface GameQuestionProps {
 	navigation: NativeStackNavigationProp<StackParamList>;
-}
-
-interface QuestionsProps {
-	id: string;
-	title: string;
-	description: string;
-	tagIds: [string];
-	imageUrl: string;
-	questions: QuestionType[];
-	createdAt: string;
-	createdBy: string;
-	playedCount: string;
-}
-
-interface QuestionType {
-	content: string;
 }
 
 const GameQuestion = ({ navigation }: GameQuestionProps) => {
@@ -44,12 +30,24 @@ const GameQuestion = ({ navigation }: GameQuestionProps) => {
 				return 0;
 		}
 	};
-
 	const [questionIdx, dispatch] = useReducer(idxReducer, 0);
 	const question = questions.find((item, idx) => idx === questionIdx)?.content;
+	const [modalVisible, setModalVisible] = useState(false);
+	const openModal = () => {
+		setModalVisible(true);
+	};
 
+	const closeModal = () => {
+		setModalVisible(false);
+	};
 	return (
 		<GameQuestionContainer>
+			<ArrowBackButton onPressBackButton={openModal} />
+			<ArrowBackButtonModal
+				modalVisible={modalVisible}
+				onClosePress={closeModal}
+				navigation={navigation}
+			/>
 			<GestureRecognizer
 				onSwipeLeft={() => dispatch('NEXT')}
 				onSwipeRight={() => dispatch('PREV')}>
